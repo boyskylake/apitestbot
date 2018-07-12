@@ -10,7 +10,7 @@
 			$commentID = $data->entry[0]->changes[0]->value->comment_id;
 			$message = $data->entry[0]->changes[0]->value->message;
 			$verb = $data->entry[0]->changes[0]->value->verb;
-			$accessToken = "EAAFww0kN59EBABCPxeZBYkPOLMMbX1gNCVYIP9uQlan9vZBCWCdrOEoIHb2G8wzFJP2LZAjFSJ1gMpDHqrxsZAWpToZBefmjA9XH2ZBoKAIZCoLF9ApEEa9GP7uaHI82wCeHuvVdLNIL9dG52Hrl0kN0aNCgRfxMwoVOMZBX23YQippqaZCU6eBze";
+			$accessToken = "EAAFww0kN59EBANtos6adhsPQK2zBmVFS9JT1ixn4ollDqln0mLuneUtjaKo9SnZAMNB1K6nw4ZCZAmisQ9WaC6a7MSkZCGoRZANDFn3YGddscP61hkFik0FsgcDwgOZAIILoUi6KCkygaGHLo6l903iw8NYfmHAPN8xWXVBPGVBDE2sM5LwBFXkE9t9oivYkLAMpe6ZAy9O4gZDZD";
 
 			if ($verb == "add") {
 				if (strtolower($message) == "red")
