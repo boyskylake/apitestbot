@@ -6,7 +6,7 @@ if (isset($_GET['hub_mode']) && isset($_GET['hub_challenge']) && isset($_GET['hu
 } else {
     // parameters
    // $hubVerifyToken = 'skylakebotfacebook';
-    $accessToken = "EAAFww0kN59EBABCPxeZBYkPOLMMbX1gNCVYIP9uQlan9vZBCWCdrOEoIHb2G8wzFJP2LZAjFSJ1gMpDHqrxsZAWpToZBefmjA9XH2ZBoKAIZCoLF9ApEEa9GP7uaHI82wCeHuvVdLNIL9dG52Hrl0kN0aNCgRfxMwoVOMZBX23YQippqaZCU6eBze";
+    //$accessToken = "EAAFww0kN59EBABCPxeZBYkPOLMMbX1gNCVYIP9uQlan9vZBCWCdrOEoIHb2G8wzFJP2LZAjFSJ1gMpDHqrxsZAWpToZBefmjA9XH2ZBoKAIZCoLF9ApEEa9GP7uaHI82wCeHuvVdLNIL9dG52Hrl0kN0aNCgRfxMwoVOMZBX23YQippqaZCU6eBze";
 
     // check token at setup
     // if ($_REQUEST['hub_verify_token'] === $hubVerifyToken) {
