@@ -6,7 +6,7 @@
 		$feedData = file_get_contents('php://input');
     // $data = json_decode($feedData);
     $handle = fopen('test.txt', 'w');
-    fwrite($handle);
+    fwrite($handle, $feedData);
     fclose($handle);
 
 		// if ($data->object == "page") {
