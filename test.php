@@ -16,7 +16,7 @@
 
     $senderId = $input['entry'][0]['messaging'][0]['sender']['id'];
     $messageText = $input['entry'][0]['messaging'][0]['message']['text'];
-    $message_to_reply = 'understand';
+    $message_to_reply = '';
 
     
     if($messageText == "hi") {
