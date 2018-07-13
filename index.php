@@ -1,41 +1,84 @@
 <?php
-	if (isset($_GET['hub_mode']) && isset($_GET['hub_challenge']) && isset($_GET['hub_verify_token'])) {
-		if ($_GET['hub_verify_token'] == 'skylakebotfacebook')
-			echo $_GET['hub_challenge'];
-	} else {
-		$feedData = file_get_contents('php://input');
-    // $data = json_decode($feedData);
-    $handle = fopen('test.txt', 'w');
-    fwrite($handle, $feedData);
-    fclose($handle);
+$access_token = "EAAFww0kN59EBAEtxHyoq0aaiETu3rhAOPo4AttIed5GlxVWrSabcP12fMibiO042XHeKs5oo5Vub95bS2cmtsYNDIyM0JWbz9QNZCPLcO2XlKjUfVVeYV9Ni9ZBGDfQPyCtDHUnCwFutweMnLD4o1U67WSgp3iOratgwa2nAZDZD";
+$verify_token = "skylakebotfacebook";
+$hub_verify_token = null;
+if(isset($_REQUEST['hub_challenge'])) {
+ $challenge = $_REQUEST['hub_challenge'];
+ $hub_verify_token = $_REQUEST['hub_verify_token'];
+}
+if ($hub_verify_token === $verify_token) {
+ echo $challenge;
+}
+$input = json_decode(file_get_contents('php://input'), true);
+$sender = $input['entry'][0]['messaging'][0]['sender']['id'];
+$message = $input['entry'][0]['messaging'][0]['message']['text'];
+$message_to_reply = '';
+/**
+ * Some Basic rules to validate incoming messages
+ */
 
-		// if ($data->object == "page") {
-		// 	$commentID = $data->entry[0]->changes[0]->value->comment_id;
-		// 	$message = $data->entry[0]->changes[0]->value->message;
-		// 	$verb = $data->entry[0]->changes[0]->value->verb;
-		// 	$accessToken = "EAAFww0kN59EBANtos6adhsPQK2zBmVFS9JT1ixn4ollDqln0mLuneUtjaKo9SnZAMNB1K6nw4ZCZAmisQ9WaC6a7MSkZCGoRZANDFn3YGddscP61hkFik0FsgcDwgOZAIILoUi6KCkygaGHLo6l903iw8NYfmHAPN8xWXVBPGVBDE2sM5LwBFXkE9t9oivYkLAMpe6ZAy9O4gZDZD";
-
-		// 	if ($verb == "add") {
-		// 		if (strtolower($message) == "red")
-		// 			$reply = "Your color is: RED!";
-		// 		else if (strtolower($message ) == "blue")
-		// 			$reply = "Your color is: BLUE!";
-		// 		else
-		// 			$reply = "You didn't choose any color!";
-
-		// 		$ch = curl_init();
-		// 		curl_setopt($ch, CURLOPT_POST, 1);
-		// 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		// 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		// 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		// 		curl_setopt($ch, CURLOPT_POSTFIELDS, "message=$reply&access_token=$accessToken");
-		// 		curl_setopt($ch, CURLOPT_URL, "https://graph.facebook.com/v2.10/$commentID/private_replies");
-		// 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
-		// 		$response = curl_exec($ch);
-		// 		curl_close($ch);
-		// 	}
-		// }
-	}
-
-	http_response_code(200);
+$api_key="<mLAP API KEY>";
+$url = 'https://api.mlab.com/api/1/databases/duckduck/collections/linebot?apiKey='.$api_key.'';
+$json = file_get_contents('https://api.mlab.com/api/1/databases/duckduck/collections/linebot?apiKey='.$api_key.'&q={"question":"'.$message.'"}');
+$data = json_decode($json);
+$isData=sizeof($data);
+if (strpos($message, 'สอนเป็ด') !== false) {
+  if (strpos($message, 'สอนเป็ด') !== false) {
+    $x_tra = str_replace("สอนเป็ด","", $message);
+    $pieces = explode("|", $x_tra);
+    $_question=str_replace("[","",$pieces[0]);
+    $_answer=str_replace("]","",$pieces[1]);
+    //Post New Data
+    $newData = json_encode(
+      array(
+        'question' => $_question,
+        'answer'=> $_answer
+      )
+    );
+    $opts = array(
+      'http' => array(
+          'method' => "POST",
+          'header' => "Content-type: application/json",
+          'content' => $newData
+       )
+    );
+    $context = stream_context_create($opts);
+    $returnValue = file_get_contents($url,false,$context);
+    $message_to_reply = 'ขอบคุณที่สอนเป็ด';
+  }
+}else{
+  if($isData >0){
+   foreach($data as $rec){
+     $message_to_reply = $rec->answer;
+   }
+  }else{
+    $message_to_reply = 'ก๊าบบ คุณสามารถสอนให้ฉลาดได้เพียงพิมพ์: สอนเป็ด[คำถาม|คำตอบ]';
+  }
+}
+//API Url
+$url = 'https://graph.facebook.com/v2.6/me/messages?access_token='.$access_token;
+//Initiate cURL.
+$ch = curl_init($url);
+//The JSON data.
+$jsonData = '{
+    "recipient":{
+        "id":"'.$sender.'"
+    },
+    "message":{
+        "text":"'.$message_to_reply.'"
+    }
+}';
+//Encode the array into JSON.
+$jsonDataEncoded = $jsonData;
+//Tell cURL that we want to send a POST request.
+curl_setopt($ch, CURLOPT_POST, 1);
+//Attach our encoded JSON string to the POST fields.
+curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+//Set the content type to application/json
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+//curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+//Execute the request
+if(!empty($input['entry'][0]['messaging'][0]['message'])){
+    $result = curl_exec($ch);
+}
 ?>
