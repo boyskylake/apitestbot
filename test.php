@@ -16,21 +16,22 @@
 
     $senderId = $input['entry'][0]['messaging'][0]['sender']['id'];
     $messageText = $input['entry'][0]['messaging'][0]['message']['text'];
+    $message_to_reply = 'understand';
 
-
-    $answer = "I don't understand. Ask me 'hi'.".$senderId;
+    
     if($messageText == "hi") {
-        $answer = "Hello";
+        $message_to_reply = "Hello";
     }
     else
     {
-
+        $message_to_reply = "I don't understand. Ask me 'hi'.".$senderId;
+    }
         $jsonData = '{
             "recipient":{
                 "id":"'.$senderId.'"
             },
             "message":{
-                "text":"'.$messageText.'"
+                "text":"'.$message_to_reply.'"
             }
         }';
     //Encode the array into JSON.
@@ -42,6 +43,6 @@
     if(!empty($input['entry'][0]['messaging'][0]['message'])){
         $result = curl_exec($ch);
     }
- }
+
 
 ?>
