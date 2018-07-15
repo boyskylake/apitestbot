@@ -24,7 +24,7 @@
     }
     else
     {
-        $message_to_reply = "I don't understand. Ask me 'hi'.".$senderId;
+        $message_to_reply = "I don't understand. Ask me 'hi'.";
     }
         $jsonData = '{
             "recipient":{
