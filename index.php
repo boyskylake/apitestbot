@@ -18,8 +18,14 @@
     $messageText = $input['entry'][0]['messaging'][0]['message']['text'];
     $message_to_reply = '';
 
-    
-    if($messageText == "hi") {
+    $json = file_get_contents('database/data.json');
+    $data = json_decode($json);
+    $mes = $data[$messageText];
+
+    if(!isset($mes) || trim($mes)){
+        $message_to_reply = $mes;
+    }
+    else if($messageText == "hi") {
         $message_to_reply = "Hello";
     }
     else
