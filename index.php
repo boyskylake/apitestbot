@@ -18,29 +18,26 @@
     $messageText = $input['entry'][0]['messaging'][0]['message']['text'];
     $message_to_reply = '';
 
-    $json = file_get_contents('database/data.json');
-    $data = json_decode($json);
+    $json = file_get_contents('database/data.json', 'UTF-8');
+    $data = json_decode($json, true);
     $mes = $data[$messageText];
 
     if(!empty($mes)){
         $message_to_reply = $mes;
     }
-    
-    if($messageText == "hi") {
-        $message_to_reply = "Hello";
-    }
     else
     {
         $message_to_reply = "I don't understand. Ask me 'hi'.";
     }
-        $jsonData = '{
-            "recipient":{
-                "id":"'.$senderId.'"
-            },
-            "message":{
-                "text":"'.$message_to_reply.'"
-            }
-        }';
+    
+    $jsonData = '{
+        "recipient":{
+            "id":"'.$senderId.'"
+        },
+        "message":{
+            "text":"'.$message_to_reply.'"
+        }
+    }';
     //Encode the array into JSON.
     $jsonDataEncoded = $jsonData;
     $ch = curl_init('https://graph.facebook.com/v2.6/me/messages?access_token='.$access_token);
