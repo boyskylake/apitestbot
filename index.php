@@ -25,7 +25,8 @@
     if(!empty($mes)){
         $message_to_reply = $mes;
     }
-    else if($messageText == "hi") {
+    
+    if($messageText == "hi") {
         $message_to_reply = "Hello";
     }
     else
